@@ -1,0 +1,20 @@
+### Health Check
+GET http://localhost:3000/health
+
+### Get Bitcoin Stats
+GET http://localhost:3000/api/stats?coin=bitcoin
+
+### Get Ethereum Stats
+GET http://localhost:3000/api/stats?coin=ethereum
+
+### Get Matic Network Stats
+GET http://localhost:3000/api/stats?coin=matic-network
+
+### Get Bitcoin Standard Deviation
+GET http://localhost:3000/api/deviation?coin=bitcoin
+
+### Get Ethereum Standard Deviation
+GET http://localhost:3000/api/deviation?coin=ethereum
+
+### Get Matic Network Standard Deviation
+GET http://localhost:3000/api/deviation?coin=matic-network 
