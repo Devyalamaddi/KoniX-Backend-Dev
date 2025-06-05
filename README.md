@@ -1,88 +1,84 @@
-# KoinX Cryptocurrency Statistics Service
+# KoinX Crypto Stats
 
-This project consists of two Node.js servers that work together to collect and expose cryptocurrency statistics using the CoinGecko API.
-
-## Architecture
-
-The system consists of two main components:
-
-1. **API Server**: Handles HTTP requests and provides endpoints for retrieving cryptocurrency statistics.
-2. **Worker Server**: Runs background jobs to periodically fetch and store cryptocurrency data.
-
-Both servers communicate through NATS messaging system.
-
-## Prerequisites
-
-- Node.js (v14 or higher)
-- MongoDB
-- NATS Server
-- Redis (optional - for future caching implementation)
+This project provides cryptocurrency statistics through an API server and a worker server that updates the stats periodically.
 
 ## Project Structure
 
-```
-/
-├── api-server/
-│   ├── src/
-│   │   ├── config/
-│   │   ├── models/
-│   │   ├── routes/
-│   │   ├── services/
-│   │   ├── utils/
-│   │   └── index.js
-│   ├── package.json
-│   └── .env.example
-└── worker-server/
-    ├── src/
-    │   ├── utils/
-    │   └── index.js
-    ├── package.json
-    └── .env.example
-```
+- `api-server/`: Express API server providing endpoints for crypto stats and deviation calculations.
+- `worker-server/`: Worker server that publishes update triggers to NATS messaging server on a schedule.
+- `worker-server/nats-server-v2.10.12-linux-amd64/`: NATS server binary used by the worker server.
 
 ## Setup Instructions
 
-### 1. Install Dependencies
+1. Clone the repository.
+
+2. Install dependencies for both servers:
 
 ```bash
-# Install API server dependencies
 cd api-server
 npm install
 
-# Install Worker server dependencies
 cd ../worker-server
 npm install
 ```
 
-### 2. Configure Environment Variables
+3. Configure environment variables:
 
 Create `.env` files in both `api-server` and `worker-server` directories with the following variables:
 
-**api-server/.env**:
+### api-server/.env
+
 ```
-# Server Configuration
+MONGODB_URI=<Your MongoDB Atlas connection string>
 PORT=3000
-NODE_ENV=development
-
-# MongoDB Configuration
-MONGODB_URI=mongodb://localhost:27017/koinx
-
-# NATS Configuration
-NATS_URL=nats://localhost:4222
-
-# Redis Configuration (optional - for future caching)
-REDIS_URL=redis://localhost:6379
 ```
 
-**worker-server/.env**:
-```
-# Server Configuration
-NODE_ENV=development
+### worker-server/.env
 
-# NATS Configuration
+```
 NATS_URL=nats://localhost:4222
 ```
 
-### 3. Start NATS Server
+4. Start the NATS server (required for worker-server):
 
+```bash
+./worker-server/nats-server-v2.10.12-linux-amd64/nats-server
+```
+
+5. Start the servers:
+
+In separate terminals, run:
+
+```bash
+cd api-server
+npm start
+```
+
+```bash
+cd worker-server
+npm start
+```
+
+## Important Notes
+
+- The API server requires a MongoDB Atlas cluster. Make sure your current IP address is whitelisted in the MongoDB Atlas security settings to allow connections.
+
+- The worker server publishes update triggers to the NATS server every minute to update crypto stats.
+
+## API Endpoints
+
+- `GET /api/stats?coin=<coin_name>`: Get the latest stats for a supported coin (`bitcoin`, `ethereum`, `matic-network`).
+
+- `GET /api/deviation?coin=<coin_name>`: Get the price deviation for a supported coin.
+
+- `GET /health`: Health check endpoint.
+
+## Testing
+
+- You can test the API endpoints using tools like Postman or curl.
+
+Example:
+
+```bash
+curl "http://localhost:3000/api/stats?coin=bitcoin"
 ```

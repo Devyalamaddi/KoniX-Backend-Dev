@@ -28,7 +28,6 @@ const cryptoStatsSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Create a compound index for efficient querying
 cryptoStatsSchema.index({ coin: 1, timestamp: -1 });
 
 const CryptoStats = mongoose.model('CryptoStats', cryptoStatsSchema);

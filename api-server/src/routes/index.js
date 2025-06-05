@@ -5,6 +5,7 @@ const { logger } = require('../utils/logger');
 const router = express.Router();
 
 // GET /api/stats?coin=bitcoin
+// Route to get the latest statistics for a given cryptocurrency coin
 router.get('/stats', async (req, res) => {
   try {
     const { coin } = req.query;
@@ -23,6 +24,7 @@ router.get('/stats', async (req, res) => {
 });
 
 // GET /api/deviation?coin=bitcoin
+// Route to get the deviation calculation for a given cryptocurrency coin
 router.get('/deviation', async (req, res) => {
   try {
     const { coin } = req.query;
@@ -40,4 +42,4 @@ router.get('/deviation', async (req, res) => {
   }
 });
 
-module.exports = router; 
+module.exports = router;

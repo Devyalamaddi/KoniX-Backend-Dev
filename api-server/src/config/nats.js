@@ -9,7 +9,6 @@ const connect = async () => {
     nc = await natsConnect({ servers: process.env.NATS_URL });
     logger.info('Connected to NATS');
 
-    // Subscribe to crypto stats update events
     const sc = StringCodec();
     const sub = nc.subscribe('crypto.stats.update');
     
